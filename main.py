@@ -28,7 +28,7 @@ from email.message import EmailMessage
 LOCAL_TZ = pytz.timezone("Europe/Istanbul")
 
 # Mail settings (GitHub Secrets'tan gelecek)
-MAIL_FROM = os.environ["MAIL_FROM"]
+MAIL_FROM = os.environ["MAIL_USER"]
 MAIL_TO   = os.environ["MAIL_TO"]
 MAIL_PASS = os.environ["MAIL_PASS"]
 
@@ -116,12 +116,12 @@ def get_price_at(df: pd.DataFrame, target_utc: datetime):
 
 def main():
 
+    now_local = datetime.now(LOCAL_TZ)   # önce
+    slots = build_time_slots(now_local)  # sonra
     if not slots:
-      print("No time slots generated")
-      return
-    now_local = datetime.now(LOCAL_TZ)
+        print("No time slots generated")
+        return
 
-    slots = build_time_slots(now_local)
     start_utc = slots[0].astimezone(pytz.utc) - timedelta(minutes=15)
     end_utc   = now_local.astimezone(pytz.utc) + timedelta(minutes=15)
 
@@ -163,7 +163,7 @@ def main():
     # Send Mail
     msg = EmailMessage()
     msg["Subject"] = f"Metal Prices {now_local.strftime('%Y-%m-%d %H:%M')} (TR)"
-    msg["From"] = MAIL_FROM
+    msg["From"] = MAIL_USER
     msg["To"] = MAIL_TO
     msg.set_content("Güncel metal/emtia fiyatları ekteki Excel dosyasındadır.")
 
@@ -176,7 +176,7 @@ def main():
         )
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(MAIL_FROM, MAIL_PASS)
+        server.login(MAIL_USER, MAIL_PASS)
         server.send_message(msg)
 
     print("OK - Mail sent")
