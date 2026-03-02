@@ -115,6 +115,10 @@ def get_price_at(df: pd.DataFrame, target_utc: datetime):
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 def main():
+
+    if not slots:
+      print("No time slots generated")
+      return
     now_local = datetime.now(LOCAL_TZ)
 
     slots = build_time_slots(now_local)
