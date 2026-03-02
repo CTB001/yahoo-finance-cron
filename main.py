@@ -163,7 +163,7 @@ def main():
     # Send Mail
     msg = EmailMessage()
     msg["Subject"] = f"Metal Prices {now_local.strftime('%Y-%m-%d %H:%M')} (TR)"
-    msg["From"] = MAIL_USER
+    msg["From"] = MAIL_FROM
     msg["To"] = MAIL_TO
     msg.set_content("Güncel metal/emtia fiyatları ekteki Excel dosyasındadır.")
 
@@ -176,7 +176,7 @@ def main():
         )
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(MAIL_USER, MAIL_PASS)
+        server.login(MAIL_FROM, MAIL_PASS)
         server.send_message(msg)
 
     print("OK - Mail sent")
