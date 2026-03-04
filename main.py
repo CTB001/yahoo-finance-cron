@@ -48,7 +48,7 @@ def build_time_slots(now_local):
     prev_day  = get_previous_business_day(now_local)
     prev_snap = prev_day.replace(hour=18, minute=10, second=0, microsecond=0)
     slots.append(prev_snap)
-    today_start = now_local.replace(hour=8, minute=0, second=0, microsecond=0)
+    today_start = now_local.replace(hour=7, minute=0, second=0, microsecond=0)
     comp_min    = (now_local.minute // 10) * 10
     today_end   = now_local.replace(minute=comp_min, second=0, microsecond=0)
     t = today_start
