@@ -2,7 +2,7 @@
 Metal/Commodity Delayed Price Fetcher
 ======================================
 Fetches 10-minute interval prices for:
-  XAUUSD, XAGUSD, XCUUSD, XPTUSD, XPLUSD, XAUTRY
+  XAUUSD, XAGUSD, XCUUSD, XPTUSD, XPLUSD, XAUTRY, USDTRY
 Two time windows per run:
   1) Yesterday 18:10 (if Monday → Friday 18:10)
   2) Today 08:00 → current time, every 10 minutes
@@ -33,7 +33,7 @@ TICKER_MAP = {
     "XPLUSD": "PA=F",
     "USDTRY": "TRY=X",
 }
-PRODUCTS = ["XAUUSD", "XAGUSD", "XCUUSD", "XPTUSD", "XPLUSD", "XAUTRY"]
+PRODUCTS = ["XAUUSD", "XAGUSD", "XCUUSD", "XPTUSD", "XPLUSD", "XAUTRY","USDTRY"]
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 TXT_FILE   = os.path.join(OUTPUT_DIR, "prices.txt")
 XLSX_FILE  = os.path.join(OUTPUT_DIR, "prices.xlsx")
@@ -102,7 +102,7 @@ def main():
         usdtry_price = get_price_at(raw["USDTRY"], slot_utc)
         for product in PRODUCTS:
             if product == "XAUTRY":
-                row["XAUTRY"] = (round(xauusd_price * usdtry_price, 4)
+                row["XAUTRY"] = (round(xauusd_price * usdtry_price/31,1035, 4)
                                  if xauusd_price and usdtry_price else None)
             else:
                 row[product] = get_price_at(raw[product], slot_utc)
@@ -130,7 +130,7 @@ def main():
         msg.add_attachment(f.read(),
                            maintype="application",
                            subtype="vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           filename="prices.xlsx")
+                           filename="MetalPrices.xlsx")
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(MAIL_FROM, MAIL_PASS)
         server.send_message(msg)
