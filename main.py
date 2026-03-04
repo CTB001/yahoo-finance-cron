@@ -102,7 +102,7 @@ def main():
         usdtry_price = get_price_at(raw["USDTRY"], slot_utc)
         for product in PRODUCTS:
             if product == "XAUTRY":
-                row["XAUTRY"] = (round(xauusd_price * usdtry_price/31,1035, 4)
+                row["XAUTRY"] = (round(xauusd_price * usdtry_price/31.1035, 4)
                                  if xauusd_price and usdtry_price else None)
             else:
                 row[product] = get_price_at(raw[product], slot_utc)
